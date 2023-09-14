@@ -12,7 +12,7 @@ import SentimentSatisfiedIcon from '@mui/icons-material/SentimentSatisfied';
 import SentimentDissatisfiedIcon from '@mui/icons-material/SentimentDissatisfied';
 import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
 
-import { detectAndTranslateText } from '../network/languageAPI'; // Sesuaikan dengan path file
+import { detectAndTranslateText } from '../network/languageApi'; // Sesuaikan dengan path file
 
 function NewsCard({ article }) {
   const [translatedTitle, setTranslatedTitle] = useState('');

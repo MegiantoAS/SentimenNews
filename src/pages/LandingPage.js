@@ -15,6 +15,7 @@ import NewsCard from './NewsCards';
 import { analyzeSentimentForNews } from './NewsFunctions';
 
 function LandingPage() {
+  // State untuk mengelola data dan status aplikasi
   const [searchQuery, setSearchQuery] = useState('Bandung');
   const [searchResults, setSearchResults] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -22,26 +23,31 @@ function LandingPage() {
   const [topNews, setTopNews] = useState([]);
   const [sliderIndex, setSliderIndex] = useState(0);
 
+  // Efek pertama: Mengatur judul dokumen dan inisialisasi pencarian dengan kata kunci "Bandung"
   useEffect(() => {
     document.title = 'Cari Berita Terbaru';
     handleSearch('Bandung');
   }, []);
 
+  // Efek kedua: Memanggil fetchTopCategoryNews ketika topCategory berubah
   useEffect(() => {
     if (topCategory) {
       fetchTopCategoryNews(topCategory);
     }
   }, [topCategory]);
 
+  // Efek ketiga: Mengambil berita teratas dan mengatur interval slider otomatis
   useEffect(() => {
     fetchTopNews();
     const intervalId = setInterval(autoSlide, 9000);
 
+    // Membersihkan interval saat komponen unmount
     return () => {
       clearInterval(intervalId);
     };
   }, []);
 
+  // Mengambil berita teratas dan menerapkan analisis sentimen
   const fetchTopNews = async () => {
     try {
       const topNews = await fetchTopHeadlines('us', 'business');
@@ -56,6 +62,7 @@ function LandingPage() {
     }
   };
 
+  // Mengambil berita dari kategori tertentu dan menerapkan analisis sentimen
   const fetchTopCategoryNews = async (category) => {
     try {
       const response = await fetchTopHeadlines('us', category);
@@ -68,6 +75,7 @@ function LandingPage() {
     }
   };
 
+  // Menangani pencarian berita dan menerapkan analisis sentimen
   const handleSearch = async () => {
     setIsLoading(true);
 
@@ -83,27 +91,32 @@ function LandingPage() {
     setIsLoading(false);
   };
 
+  // Fungsi untuk menggeser slider berita teratas secara otomatis
   const autoSlide = () => {
     setSliderIndex((prevIndex) =>
       prevIndex === topNews.length - 1 ? 0 : prevIndex + 1
     );
   };
 
+  // Menangani klik pada kategori berita
   const handleCategoryClick = (category) => {
     setTopCategory(category);
     fetchTopCategoryNews(category);
   };
 
+  // Menangani perubahan slider
   const handleSliderChange = (event, newValue) => {
     setSliderIndex(newValue);
   };
 
+  // Menangani klik tombol slider berikutnya
   const handleSliderNext = () => {
     setSliderIndex((prevIndex) =>
       prevIndex === topNews.length - 1 ? 0 : prevIndex + 1
     );
   };
 
+  // Menangani klik tombol slider sebelumnya
   const handleSliderPrev = () => {
     setSliderIndex((prevIndex) =>
       prevIndex === 0 ? topNews.length - 1 : prevIndex - 1
@@ -112,6 +125,7 @@ function LandingPage() {
 
   return (
     <Container maxWidth="lg" style={{ marginTop: '2rem' }}>
+      {/* Komponen untuk menampilkan berita teratas */}
       <TopNews
         topNews={topNews}
         sliderIndex={sliderIndex}
@@ -120,10 +134,12 @@ function LandingPage() {
         handleSliderNext={handleSliderNext}
       />
 
+      {/* Judul halaman */}
       <Typography variant="h4" gutterBottom style={{ color: '#4285f4' }}>
         Cari Berita Terbaru
       </Typography>
 
+      {/* Kotak pencarian berita */}
       <Grid container spacing={2}>
         <Grid item xs={12} md={8}>
           <TextField
@@ -160,6 +176,7 @@ function LandingPage() {
           />
         </Grid>
         <Grid item xs={12} md={4}>
+          {/* Tombol untuk memulai pencarian */}
           <Button
             fullWidth
             variant="contained"
@@ -176,11 +193,12 @@ function LandingPage() {
         </Grid>
       </Grid>
 
+      {/* Judul untuk kategori berita populer */}
       <Typography variant="h5" style={{ marginTop: '2rem', marginBottom: '1rem' }}>
         Kategori Berita Populer
       </Typography>
 
-      {/* Kategori berita */}
+      {/* Daftar kategori berita */}
       <Grid container spacing={2}>
         {['business', 'entertainment', 'general', 'health', 'science', 'sports', 'technology'].map((category, index) => (
           <Grid item key={index} xs={6} md={2}>
@@ -199,6 +217,7 @@ function LandingPage() {
         ))}
       </Grid>
 
+      {/* Indikator loading saat pencarian */}
       {isLoading && <CircularProgress style={{ marginTop: '2rem' }} />}
 
       {/* Tampilan hasil pencarian berita */}
@@ -219,5 +238,4 @@ function LandingPage() {
     </Container>
   );
 }
-
 export default LandingPage;

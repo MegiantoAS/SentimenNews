@@ -8,8 +8,7 @@ const sentimentApi = axios.create({
 
 export const analyzeSentiment = async (text) => {
   try {
-    const response = await sentimentApi.post(
-      `/documents:analyzeSentiment?key=${API_KEY}`, 
+    const response = await sentimentApi.post(`/documents:analyzeSentiment?key=${API_KEY}`, 
       {
         document: {
           content: text,
